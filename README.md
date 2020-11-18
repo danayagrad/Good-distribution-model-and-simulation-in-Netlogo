@@ -1,6 +1,6 @@
 # Good-distribution-model-and-simulation-in-Netlogo
 
-<<<<<<< HEAD
+
 In this project, a system of goods distribution was designed, modeled,  and simulated using NetLogo, an ABM modeling environment. Agent-based modeling, or ABM, is a computational modeling methodology that focuses on the individual active components of a system and simulates actions and interactions.
 The system studied and modeled in the report constitutes the physical distribution from the warehouse or central distribution center to the retailers. The modeling process followed real actions, rules, and constraints that actually occur in real life with some assumptions and exceptions. Also, this model allows users inputs and also displays their outputs for simulation purposes.
 
@@ -8,7 +8,11 @@ The system studied and modeled in the report constitutes the physical distributi
 The link of model: file:///D:/IT%20learning/Portfolios/Good-distribution-model-and-simulation-in-Netlogo/ABMModel.html
 
 
+
+
 ![alt text](https://github.com/danayagrad/Good-distribution-model-and-simulation-in-Netlogo/blob/main/GoodDistribution.jpg)
+
+
 
 
 1. Tools: NetLogo
