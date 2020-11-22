@@ -1,4 +1,6 @@
-globals [
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; set model properties,  define environment, agents, and their properties.
+
+globals [      ; Define global variables which are the properties of the whole system.
   total-order
   cost
   backlog
@@ -12,20 +14,20 @@ globals [
   absolute-demand
   old-late-delivery
 ]
-breed [warehouses warehouse]
+breed [warehouses warehouse]  ; define agents.
 breed [stations station]
 
-warehouses-own [
+warehouses-own [ ; set properties of warehouse.
   max-cap
   available-cap1
 ]
 
-stations-own [
+stations-own [ ; set properties of station.
   max-cap
 ]
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; initialize environment: all displays and time.
 
 to setup
   clear-all
@@ -41,38 +43,39 @@ to go
   ]
 end
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Set up graphics.
 
 to layout  ; set location of the graphic, howerver in this analysis distance between all turtles is assume to be 1.
-   create-stations 1 [
-    setxy 7 5
-    set color 126
-    set shape "house efficiency"
-    set size 3
+   create-stations 1 [ ; set station (retailers, in thhis case retailers is assumed to be a group)
+    setxy 7 5          ; station position on display screen.
+    set color 126      ; station colour.
+    set shape "house efficiency"  ; station shape.
+    set size 3                    ; size of station icon.
   ]
-  create-stations 1[
+  create-stations 1[ ; set station ( hub)
     setxy 6 0
     set color 56
     set shape "house ranch"
     set size 5
   ]
 
-  create-warehouses 1 [
+  create-warehouses 1 [ ; set warehouse
     setxy -7 0
     set color 44
     set shape "building store"
     set size 7
   ]
 
-  ask warehouses  [create-link-to station 0]
-  ask warehouses  [create-link-to station 1]
-  ask station 1 [create-link-to station 0]
+  ask warehouses  [create-link-to station 0] ; create connection between warehouse and retailers.
+  ask warehouses  [create-link-to station 1] ; create connection between warehouse and hub.
+  ask station 1 [create-link-to station 0]   ; create connection between hun and retailers.
 
 end
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-to initialize
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; set rules and commands for agents to follow.
+
+to initialize  ; initialize value of agent variables at the beginning.
   ask warehouses [
     set cost 0
     set total-order 0
@@ -86,7 +89,7 @@ to initialize
   ]
 end
 
-to  process-order
+to  process-order ; rules for ordering, direct delivery, and via hub delivery.
     ask warehouses [
     set old-late-delivery old-late-delivery + late-delivery           ; store yesterday backlog for future use.
     set absolute-demand demand + random demand-factor-range           ; absolute demand = base demand + random no.
@@ -94,7 +97,7 @@ to  process-order
     set total-order absolute-demand + backlog                         ; current tick total order = absolute demand + backlog
     set bottle-neck min list warehouse-max-capacity hub-max-capacity
 
-    if warehouse-max-capacity >= hub-max-capacity [                   ; action in case warehouse cap is more than hub cap
+    if warehouse-max-capacity >= hub-max-capacity [                   ; action in case warehouse cap is more than hub cap.
       set max-cap warehouse-max-capacity
       set quantity-to-hub min list hub-max-capacity total-order       ; first, calculate quantity send to hub
       set available-cap1 (max-cap - quantity-to-hub)                  ; calculate if warehoues still has any capcity left after delivery to hub
@@ -109,7 +112,7 @@ to  process-order
 
     ]
   ]
-    if warehouse-max-capacity < hub-max-capacity [                     ; action in case warehouse cap is less than hub cap
+    if warehouse-max-capacity < hub-max-capacity [                     ; action in case warehouse cap is less than hub cap.
       set max-cap warehouse-max-capacity
       set quantity-to-hub min list warehouse-max-capacity total-order
       set available-cap1 (max-cap - quantity-to-hub)
@@ -135,7 +138,7 @@ to  process-order
 
 end
 
-to-report average-total-cost
+to-report average-total-cost                                               ; report results.
   report  cost  / (monthly-total-order - backlog)                          ; calculate avarge delivery cost of all orders untill current tick.
 end
 @#$#@#$#@
